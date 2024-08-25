@@ -1,9 +1,17 @@
 {
-  "is_success": true,
-  "user_id": "nithin21",
-  "email": "nithin.21bce9933@vitstudent.ac.in",
-  "roll_number": "21BCE9933",
-  "numbers": [],
-  "alphabets": ["A", "C", "z"],
-  "highest_lowercase_alphabet": ["z"]
+  "name": "bfhl_api",
+  "version": "1.0.0",
+  "description": "BFHL API for processing and filtering JSON data",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
 }
