@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21BCE9933</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .response pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+<h1>API Interaction</h1>
+
+<label for="jsonInput">Enter JSON Data:</label>
+<input type="text" id="jsonInput" placeholder='{"data": ["A", "C", "z"]}'>
+
+<label for="responseFilter">Select Response Data:</label>
+<select id="responseFilter" multiple>
+    <option value="numbers">Numbers</option>
+    <option value="alphabets">Alphabets</option>
+    <option value="highest_lowercase_alphabet">Highest Lowercase Alphabet</option>
+</select>
+
+<button id="submitButton" onclick="submitData()">Submit</button>
+
+<div id="responseContainer" class="response" style="display: none;">
+    <h2>Response</h2>
+    <pre id="responseData"></pre>
+</div>
+
+<script>
+    function submitData() {
+        const jsonInput = document.getElementById('jsonInput').value;
+        const selectedFilters = Array.from(document.getElementById('responseFilter').selectedOptions)
+                                    .map(option => option.value);
+
+        let parsedInput;
+        try {
+            parsedInput = JSON.parse(jsonInput);
+        } catch (e) {
+            alert('Invalid JSON format');
+            return;
+        }
+
+        fetch('http://localhost:3000/bfhl', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(parsedInput)
+        })
+        .then(response => response.json())
+        .then(data => {
+            let filteredData = {};
+            selectedFilters.forEach(filter => {
+                if (data[filter] !== undefined) {
+                    filteredData[filter] = data[filter];
+                }
+            });
+            displayResponse(filteredData);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function displayResponse(filteredData) {
+        const responseContainer = document.getElementById('responseContainer');
+        const responseData = document.getElementById('responseData');
+
+        responseData.textContent = JSON.stringify(filteredData, null, 2);
+        responseContainer.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
